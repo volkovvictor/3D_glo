@@ -7,11 +7,38 @@ const validation = () => {
       return str.replace(/\D/gi, "");
    };
 
+   const allValidate = (input) => {
+      const strArr = [];
+      const type = input.getAttribute("type") || input.getAttribute("name");
+      
+      let str = input.value;
+
+      str = str.replace(/^\-+/gi, "").trim();
+      str = str.replace(/\-+$/gi, "").trim();
+      str = str.replace(/\s{2,}/gi, " ").trim();
+      str = str.replace(/\-{2,}/gi, "-").trim();
+      
+      if (type === "email") str = str.replace(/[^\@\-\_\.\!\~\*\'\w]/gi, "");
+
+      if (type === "tel") str = str.replace(/[^\-()\d]/g, "");
+
+      if (type === "text" || type === "user_message") {
+         str = str.replace(/[^а-я\-\s]/gi, "").trim();
+         if (str === "") return str;
+
+         str.split(' ').forEach(item => strArr.push(item[0].toUpperCase() + item.slice(1)));
+         str = strArr.join(' ');
+      }
+
+      return str;
+   }
+
    calcInputs.forEach(input => {
-      input.addEventListener('input', () => {
+      input.addEventListener('blur', () => {
          input.value = inputNum(input.value);
       });
    });
+   
 
    forms.forEach(form => {
       const name = form.querySelector('input[name="user_name"]');
@@ -19,22 +46,23 @@ const validation = () => {
       const phone = form.querySelector('input[type="tel"]');
       const message = form.querySelector('input[name="user_message"]');
 
-      name.addEventListener('input', () => {
-         name.value = name.value.replace(/[^а-я\-\s]/gi, "");
+
+      name.addEventListener('blur', () => {
+         name.value = allValidate(name);
       });
 
       if (message) {
-         message.addEventListener('input', () => {
-            message.value = message.value.replace(/[^а-я\-\s]/gi, "");
+         message.addEventListener('blur', () => {
+            message.value = allValidate(message);
          });
       }
 
-      email.addEventListener('input', () => {
-         email.value = email.value.replace(/[^@-_\.!~*\'\w]/gi, "");
+      email.addEventListener('blur', () => {
+         email.value = allValidate(email);
       });
 
-      phone.addEventListener('input', () => {
-         phone.value = phone.value.replace(/[^-()\d]/g, "");
+      phone.addEventListener('blur', () => {
+         phone.value = allValidate(phone);
       });
       
    });
