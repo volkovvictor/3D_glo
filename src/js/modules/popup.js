@@ -13,8 +13,6 @@ const popup = () => {
       const animatePopup = () => {
          count += 0.1;
 
-         console.log(count)
-
          let requestId = requestAnimationFrame(animatePopup);
 
          if (count >= 1) {
