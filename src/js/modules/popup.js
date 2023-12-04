@@ -26,6 +26,12 @@ const popup = () => {
       animatePopup();
    }
 
+   const closePopup = () => {
+      popup.style.display = "none";
+      popup.style.opacity = "0";
+      popupContent.style.transform = "scale(0)";
+   }
+
    popupBtn.forEach(btn => {
       btn.addEventListener('click', () => {
          popup.style.display = "block";
@@ -37,11 +43,15 @@ const popup = () => {
       });
    })
 
-   popupClose.addEventListener('click', () => {
-      popup.style.display = "none";
-      popup.style.opacity = "0";
-      popupContent.style.transform = "scale(0)";
-   })
+   //popupClose.addEventListener('click', () => {
+   //   popup.style.display = "none";
+   //   popup.style.opacity = "0";
+   //   popupContent.style.transform = "scale(0)";
+   //})
+
+   popup.addEventListener('click', (e) => {
+      if (!e.target.closest('.popup-content') || e.target.classList.contains('popup-close')) closePopup();
+   });
 }
 
 export default popup;
