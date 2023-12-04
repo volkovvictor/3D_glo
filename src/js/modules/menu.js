@@ -9,10 +9,16 @@ const menu = () => {
    }
 
    menuBtn.addEventListener('click', handlerMenu);
-   closeBtn.addEventListener('click', handlerMenu);
+   //closeBtn.addEventListener('click', handlerMenu);
 
-   menuItems.forEach(item => {
-      item.addEventListener('click', handlerMenu);
+   //menuItems.forEach(item => {
+   //   item.addEventListener('click', handlerMenu);
+   //});
+
+   menu.addEventListener('click', (e) => {
+      if (e.target.tagName === "A") {
+         handlerMenu();
+      }
    });
 }
 
