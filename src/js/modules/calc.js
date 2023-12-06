@@ -22,15 +22,31 @@ const calc = (price) => {
          totalPrice = price * calcTypeValue * calcSquareValue * calcCountValue * calcDayValue;
       }
 
-      total.textContent = totalPrice;
+      return totalPrice;
    };
+
+   const animateCalc = () => {
+      const totalPrice = countCalc();
+      //total.textContent = 0;
+      //console.log(total.textContent)
+
+      if (+total.textContent < totalPrice) {
+         total.textContent++;
+         setInterval(animateCalc, 10);
+      }
+
+      if (+total.textContent > totalPrice) {
+         total.textContent--;
+         setInterval(animateCalc, 0);
+      }
+   }
 
    calcBlock.addEventListener('input', (e) => {
       const target = e.target;
 
       if (target === calcType || target === calcSquare
          || target === calcCount || target === calcDay) {
-            countCalc();
+            animateCalc();
             
       }
    })
