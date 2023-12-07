@@ -1,3 +1,5 @@
+import { animate } from './helpers';
+
 const calc = (price) => {
    const calcBlock = document.querySelector('.calc-block');
    const calcType = calcBlock.querySelector('.calc-type');
@@ -25,28 +27,28 @@ const calc = (price) => {
       return totalPrice;
    };
 
-   const animateCalc = () => {
-      const totalPrice = countCalc();
-      //total.textContent = 0;
-      //console.log(total.textContent)
-
-      if (+total.textContent < totalPrice) {
-         total.textContent++;
-         setInterval(animateCalc, 10);
-      }
-
-      if (+total.textContent > totalPrice) {
-         total.textContent--;
-         setInterval(animateCalc, 0);
-      }
-   }
-
    calcBlock.addEventListener('input', (e) => {
       const target = e.target;
 
       if (target === calcType || target === calcSquare
          || target === calcCount || target === calcDay) {
-            animateCalc();
+            animate({
+               duration: 1000 * countCalc(),
+               timing(timeFraction) {
+                  return timeFraction;
+               },
+               draw(progress) {
+                  const totalPrice = countCalc();
+
+                  if (+total.textContent < totalPrice) {
+                     total.textContent++;
+                  }
+
+                  if (+total.textContent > totalPrice) {
+                     total.textContent--;
+                  }
+               }
+               });
             
       }
    })
