@@ -20,10 +20,18 @@ const validation = () => {
       
       if (type === "email") str = str.replace(/[^\@\-\_\.\!\~\*\'\w]/gi, "");
 
-      if (type === "tel") str = str.replace(/[^\-()\d]/g, "");
+      if (type === "tel") str = str.replace(/[^\-+()\d]/g, "");
 
-      if (type === "text" || type === "user_message") {
-         str = str.replace(/[^а-я\-\s]/gi, "").trim();
+      if (type === "text") {
+         str = str.replace(/[^а-я\s]/gi, "").trim();
+         if (str === "") return str;
+
+         str.split(' ').forEach(item => strArr.push(item[0].toUpperCase() + item.slice(1)));
+         str = strArr.join(' ');
+      }
+
+      if (type === "user_message") {
+         str = str.replace(/[a-z]/gi, "").trim();
          if (str === "") return str;
 
          str.split(' ').forEach(item => strArr.push(item[0].toUpperCase() + item.slice(1)));
