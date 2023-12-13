@@ -8,6 +8,15 @@ const sendForm = ({formId, someElem = []}) => {
          body: JSON.stringify(data)
       }).then(data => data.json());
    };
+
+   const validate = (input) => {
+      input.classList.remove('error');
+      input.style.border = '';
+
+      if (input.value.trim() === '') input.classList.add('error');
+      if (input.type === 'tel' && input.value.length < 11) input.classList.add('error');
+      if (input.classList.contains('error')) input.style.border = '1px solid red';
+   }
    
 
    try {
@@ -16,8 +25,11 @@ const sendForm = ({formId, someElem = []}) => {
       form.addEventListener('submit', (e) => {
          e.preventDefault();
          
+         const inputs = form.querySelectorAll('input');
          const formData = new FormData(form);
          const formBody = {};
+
+         let success = true;
 
          formData.forEach((val, key) => {
             formBody[key] = val;
@@ -30,17 +42,25 @@ const sendForm = ({formId, someElem = []}) => {
             if (elem.type == 'input') formBody[elem.id] = item.value;
          });
 
-         statusBlock.textContent = 'Загрузка...';
-         form.append(statusBlock);
+         inputs.forEach(input => {
+            validate(input);
 
-         sendData(formBody)
-         .then(data => {
-            form.reset();
-            statusBlock.textContent = 'Данные отправлены!';
-         })
-         .catch(err => {
-            statusBlock.textContent = 'Произошла ошибка'
-         }) 
+            if (input.classList.contains('error')) success = false;
+         });
+
+         if (success) {
+            statusBlock.textContent = 'Загрузка...';
+            form.append(statusBlock);
+
+            sendData(formBody)
+               .then(data => {
+                  form.reset();
+                  statusBlock.textContent = 'Данные отправлены!';
+               })
+               .catch(err => {
+                  statusBlock.textContent = 'Произошла ошибка'
+               }) 
+         }
       });
 
    } catch(err) {}

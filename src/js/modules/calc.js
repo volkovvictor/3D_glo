@@ -33,7 +33,7 @@ const calc = (price) => {
       if (target === calcType || target === calcSquare
          || target === calcCount || target === calcDay) {
             animate({
-               duration: 1000 * countCalc(),
+               duration: 1000,
                timing(timeFraction) {
                   return timeFraction;
                },
@@ -41,11 +41,11 @@ const calc = (price) => {
                   const totalPrice = countCalc();
 
                   if (+total.textContent < totalPrice) {
-                     total.textContent++;
+                     total.textContent = Math.floor(totalPrice * progress);
                   }
 
                   if (+total.textContent > totalPrice) {
-                     total.textContent--;
+                     total.textContent = Math.floor(totalPrice * progress);
                   }
                }
                });
